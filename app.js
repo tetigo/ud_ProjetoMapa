@@ -119,12 +119,20 @@ var ViewModel = function() {
                 type: type,
                 foursquare: foursquare
             });
+
             markers.push(marker);
             bounds.extend(marker.position);
             marker.addListener('click', function(){
                 self.populateInfoWindow(this, largeInfoWindow);
+
+                if (this.getAnimation() !== null) {
+                    this.setAnimation(null);
+                } else {
+                    this.setAnimation(google.maps.Animation.BOUNCE);
+                }
+
             });
-            marker.setAnimation(google.maps.Animation.BOUNCE);
+
             self.showListings(markers);
         }
     }
@@ -133,8 +141,8 @@ var ViewModel = function() {
     this.foursquareInfos = function(id) {
         var foursquareInfos = [];
         var apiURL = "https://api.foursquare.com/v2/venues/" + id +
-            "?client_id=CLIENT_ID&"+           // substituir CLIENT_ID por seu id de cliente no foursquare
-            "client_secret=CLIENT_SECRET&"+    // substituir CLIENT_SECRET pelo seu secret do foursquare
+            "?client_id=5AIZSJNTCCQ0RUZAYN5IZLXZ1FQSHA021R3KI5DGVGX0GVTF&"+           // substituir CLIENT_ID por seu id de cliente no foursquare
+            "client_secret=SFPC1ZVXZ0II1WIXDBVUB4H00HD5I1D5UYKE1SDMCXNTE0U0&"+    // substituir CLIENT_SECRET pelo seu secret do foursquare
             "v=20180323&intent=browse";
 
         $.getJSON(apiURL, function(data) {
@@ -176,6 +184,10 @@ var ViewModel = function() {
             infowindow.setContent('');
             infowindow.marker = marker;
             infowindow.addListener('closeclick', function(){
+                if (infowindow.marker !== null){
+                    infowindow.marker.setAnimation(null);
+                }
+
                 infowindow.marker = null;
             });
 
@@ -206,6 +218,7 @@ var ViewModel = function() {
 
             self.foursquareInfos(marker.foursquare);
             streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+            
             infowindow.open(map, marker);
         }
     }
@@ -223,8 +236,9 @@ var ViewModel = function() {
     //Mostra uma infowindow ao clicar no lugar
     this.showInfos = function(place) {
         var index = markers.map(function(o) { return o.id; }).indexOf(place.id());
-        viewModel.populateInfoWindow(markers[index],largeInfoWindow);
+        viewModel.populateInfoWindow(markers[index],largeInfoWindow);      
     }
+    
 
     $('.button-collapse').sideNav({
         menuWidth: 300,

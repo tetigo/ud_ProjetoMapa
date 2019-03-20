@@ -38,8 +38,8 @@
                               </ul>
                           </div>
                         </li>
-                        <li data-bind="value: lista_parque">
-                          <div class="collapsible-header" data-bind=""><i class="material-icons">nature_people</i>Parques</div>
+                        <li>
+                          <div class="collapsible-header"><i class="material-icons">nature_people</i>Parques</div>
                           <div class="collapsible-body">
                               <ul data-bind="foreach: lista_parque">
                                   <li class="markers" data-bind="text: title, click: $parent.showInfos"></li>
@@ -65,7 +65,7 @@
     <script src="style.js"></script>
     <script src="app.js"></script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?v=3&key=API_KEY&callback=initMap" 
+        src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCoBfdxVmIrZElwg5QbsYam9pRe-I5CZRE&callback=initMap" 
         onerror="mapError()">
     </script>
 
