@@ -1,3 +1,5 @@
+
+//Locais para mostrar no mapa
 var places = [
     {
         id: 01,
@@ -31,6 +33,16 @@ var places = [
     },
     {
         id: 04,
+        type: 'parque',
+        title: 'Jardim Botânico de Jundiaí',
+        location:{
+            lat: -23.173553138498214,
+            lng: -46.90042399751054
+        },
+        foursquare: '4e74b39688775d593d9c7218'
+    },
+    {
+        id: 05,
         type: 'restaurante',
         title: 'Outback Steakhouse',
         location:{
@@ -39,13 +51,25 @@ var places = [
         },
         foursquare: '507edceaf31c44e07e258602'
     },
+    {
+        id: 06,
+        type: 'restaurante',
+        title: 'Villa Brunholi',
+        location:{
+            lat: -23.151353102239195,
+            lng: -46.82441710150817
+        },
+        foursquare: '4f7e5071e4b04310236dccc3'
+    },
 
 ];
 
+//Google Maps
 var markers = [];
 var largeInfoWindow;
 var bounds;
 
+//Model
 var Place = function(data) {
     this.id = ko.observable(data.id);
     this.type = ko.observable(data.type);
@@ -54,9 +78,11 @@ var Place = function(data) {
     this.foursquare = ko.observable(data.foursquare);
 };
 
+//Viewmodel
 var ViewModel = function() {
     var self = this;
 
+    //Pegar os lugares e colocar em listas do knockout
     this.lista_cafe = ko.observableArray([]);
     this.lista_restaurante = ko.observableArray([]);
     this.lista_parque = ko.observableArray([]);
@@ -77,6 +103,7 @@ var ViewModel = function() {
         }
     });
 
+    //Marcadores do Google Maps
     this.createMarkers = function(locations, bounds, largeInfoWindow) {
         for(var i = 0 ; i < locations.length ; i++) {
             var position = locations[i].location();
@@ -97,10 +124,12 @@ var ViewModel = function() {
             marker.addListener('click', function(){
                 self.populateInfoWindow(this, largeInfoWindow);
             });
+            marker.setAnimation(google.maps.Animation.BOUNCE);
             self.showListings(markers);
         }
     }
 
+    //Pega info do Foursquare
     this.foursquareInfos = function(id) {
         var foursquareInfos = [];
         var apiURL = "https://api.foursquare.com/v2/venues/" + id +
@@ -181,6 +210,7 @@ var ViewModel = function() {
         }
     }
 
+    //Marcadores aparecem no mapa
     this.showListings = function(list) {
         var bounds = new google.maps.LatLngBounds();
         for(var i = 0 ; i < list.length ; i++) {
@@ -190,6 +220,7 @@ var ViewModel = function() {
         map.fitBounds(bounds);
     }
 
+    //Mostra uma infowindow ao clicar no lugar
     this.showInfos = function(place) {
         var index = markers.map(function(o) { return o.id; }).indexOf(place.id());
         viewModel.populateInfoWindow(markers[index],largeInfoWindow);
@@ -205,6 +236,7 @@ var ViewModel = function() {
     $('.collapsible').collapsible();
 }
 
+//comeca o mapa
 function initMap() {
     var styles = (typeof meu_mapa !== 'undefined') ? meu_mapa : '';
 
@@ -220,7 +252,11 @@ function initMap() {
     viewModel.createMarkers(viewModel.lista_geral(), bounds, largeInfoWindow);
 
 }
+function gm_authFailure() { 
+        $('#map').html('<p class="erro">Falha de Autenticacao no Google Maps.<br></p>');
+}
 
+//Se nao comunicar com google maps, mostra erro
 function mapError() {
     $('#map').html('<p class="erro">Impossível carregar Google Maps.<br></p>');
 }
