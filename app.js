@@ -114,35 +114,30 @@ var ViewModel = function() {
             var marker = new google.maps.Marker({
                 position: position,
                 title: title,
-                animation: google.maps.Animation.DROP,
+                animation: google.maps.Animation.BOUNCE,
                 id: id,
                 type: type,
-                foursquare: foursquare
+                foursquare: foursquare,
+                visible: false,
             });
 
             markers.push(marker);
             bounds.extend(marker.position);
+
             marker.addListener('click', function(){
                 self.populateInfoWindow(this, largeInfoWindow);
-
-                if (this.getAnimation() !== null) {
-                    this.setAnimation(null);
-                } else {
-                    this.setAnimation(google.maps.Animation.BOUNCE);
-                }
-
             });
-
             self.showListings(markers);
         }
+
     }
 
     //Pega info do Foursquare
     this.foursquareInfos = function(id) {
         var foursquareInfos = [];
         var apiURL = "https://api.foursquare.com/v2/venues/" + id +
-            "?client_id=5AIZSJNTCCQ0RUZAYN5IZLXZ1FQSHA021R3KI5DGVGX0GVTF&"+           // substituir CLIENT_ID por seu id de cliente no foursquare
-            "client_secret=SFPC1ZVXZ0II1WIXDBVUB4H00HD5I1D5UYKE1SDMCXNTE0U0&"+    // substituir CLIENT_SECRET pelo seu secret do foursquare
+            "?client_id=CLIENT_ID&"+           // substituir CLIENT_ID por seu id de cliente no foursquare
+            "client_secret=CLIENT_SECRET&"+    // substituir CLIENT_SECRET pelo seu secret do foursquare
             "v=20180323&intent=browse";
 
         $.getJSON(apiURL, function(data) {
@@ -178,17 +173,24 @@ var ViewModel = function() {
         });
     }
 
+    
     this.populateInfoWindow = function(marker, infowindow) {
+        //marker.setVisible(true);
+        
+        for (var i = 0; i < markers.length; i++) {
+            if(markers[i] != marker){
+                markers[i].setVisible(false);
+            }else{
+                markers[i].setVisible(true);
+            }
+        }
+
         if(infowindow.marker != marker) {
             infowindow.marker = marker;
             infowindow.setContent('');
-            infowindow.marker = marker;
             infowindow.addListener('closeclick', function(){
-                if (infowindow.marker !== null){
-                    infowindow.marker.setAnimation(null);
-                }
-
                 infowindow.marker = null;
+                marker.setVisible(false);
             });
 
             infowindow.setContent(
@@ -237,8 +239,7 @@ var ViewModel = function() {
     this.showInfos = function(place) {
         var index = markers.map(function(o) { return o.id; }).indexOf(place.id());
         viewModel.populateInfoWindow(markers[index],largeInfoWindow);      
-    }
-    
+    }    
 
     $('.button-collapse').sideNav({
         menuWidth: 300,
