@@ -118,7 +118,7 @@ var ViewModel = function() {
                 id: id,
                 type: type,
                 foursquare: foursquare,
-                visible: false,
+                //visible: false,
             });
 
             markers.push(marker);
@@ -178,7 +178,7 @@ var ViewModel = function() {
         //marker.setVisible(true);
         
         for (var i = 0; i < markers.length; i++) {
-            if(markers[i] != marker){
+            if(markers[i].type != marker.type){
                 markers[i].setVisible(false);
             }else{
                 markers[i].setVisible(true);
@@ -190,12 +190,12 @@ var ViewModel = function() {
             infowindow.setContent('');
             infowindow.addListener('closeclick', function(){
                 infowindow.marker = null;
-                marker.setVisible(false);
+                //marker.setVisible(false);
             });
 
             infowindow.setContent(
                 '<div id="titu"><h4>' + marker.title + '</h4></div>'+
-                '<div id="square"></div><div id="imagem"></div>'
+                '<div id="square" class="modal"></div><div id="imagem"></div>'
             );
 
             var streetViewService = new google.maps.StreetViewService();
@@ -249,7 +249,23 @@ var ViewModel = function() {
     });
 
     $('.collapsible').collapsible();
+
 }
+
+function lista(id){
+	//console.log(id);
+    for (var i = 0; i < markers.length; i++) {
+        if(markers[i].type != id){
+            markers[i].setVisible(false);
+        }else{
+            markers[i].setVisible(true);
+        }        
+    }
+
+
+}
+
+
 
 //comeca o mapa
 function initMap() {

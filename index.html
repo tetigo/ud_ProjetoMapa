@@ -23,7 +23,7 @@
                     <i class="material-icons center">search</i>
                     <ul class="collapsible" data-collapsible="accordion">
                         <li>
-                          <div class="collapsible-header"><i class="material-icons">local_cafe</i>Cafés</div>
+                          <div class="collapsible-header" id="cafe" onclick="lista(id);"><i class="material-icons">local_cafe</i>Cafés</div>
                           <div class="collapsible-body">
                               <ul data-bind="foreach: lista_cafe">
                                   <li class="markers" data-bind="text: title, click: $parent.showInfos"></li>
@@ -31,7 +31,7 @@
                           </div>
                         </li>
                         <li>
-                          <div class="collapsible-header"><i class="material-icons">restaurant</i>Restaurantes</div>
+                          <div class="collapsible-header" id="restaurante" onclick="lista(id);"><i class="material-icons">restaurant</i>Restaurantes</div>
                           <div class="collapsible-body">
                               <ul data-bind="foreach: lista_restaurante">
                                   <li class="markers" data-bind="value: id, text: title, click: $parent.showInfos"></li>
@@ -39,7 +39,7 @@
                           </div>
                         </li>
                         <li>
-                          <div class="collapsible-header"><i class="material-icons">nature_people</i>Parques</div>
+                          <div class="collapsible-header" id="parque" onclick="lista(id);"><i class="material-icons">nature_people</i>Parques</div>
                           <div class="collapsible-body">
                               <ul data-bind="foreach: lista_parque">
                                   <li class="markers" data-bind="text: title, click: $parent.showInfos"></li>
@@ -68,6 +68,6 @@
         src="https://maps.googleapis.com/maps/api/js?v=3&key=API_KEY&callback=initMap" 
         onerror="mapError()">
     </script>
-
+    
 </body>
 </html>
