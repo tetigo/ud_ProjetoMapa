@@ -257,8 +257,10 @@ function lista(id){
     for (var i = 0; i < markers.length; i++) {
         if(markers[i].type != id){
             markers[i].setVisible(false);
+	    markers[i].setAnimation(null);
         }else{
             markers[i].setVisible(true);
+	    markers[i].setAnimation(google.maps.Animation.BOUNCE);
         }        
     }
 
